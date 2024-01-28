@@ -6,6 +6,7 @@ Nous calculons le prix ainsi que les différentes lettres grecques d'options loo
 $$
 S(T) - \min_{t \in [0,T]} S_t
 \quad
+, 
 \max_{t \in [0,T]} S_t - S(T)
 $$
 ```
