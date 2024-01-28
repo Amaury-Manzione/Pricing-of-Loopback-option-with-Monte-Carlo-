@@ -26,8 +26,8 @@ extern "C" {
         delete lookback;
     }
 
-    DLL_EXPORT double pricer_VBA(Lookback* lookback) {
-        return lookback->getPrice();
+    DLL_EXPORT double price_VBA(Lookback* lookback) {
+        return lookback->price();
     }
 
     DLL_EXPORT double delta_VBA(Lookback* lookback, double epsilon) {
@@ -52,7 +52,7 @@ extern "C" {
 
     DLL_EXPORT double compute_price(double S0, double r, double sigma, double T, double T0, int K, int n, int N) {
         BlackScholes B(S0, r, sigma);
-        return Lookback(B, T, T0, K, n, N).getPrice();
+        return Lookback(B, T, T0, K, n, N).price();
     }
 
     DLL_EXPORT double compute_delta(double S0, double r, double sigma, double T, double T0, int K, int n, int N, double epsilon) {

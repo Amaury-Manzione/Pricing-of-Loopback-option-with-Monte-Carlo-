@@ -25,9 +25,6 @@ private:
     // number of sub intervals for each discretization
     int n_;
 
-    // the approximative price of the option
-    double price_;
-
 public:
     /**
      * @brief Construct a new Loopback object
@@ -55,14 +52,14 @@ public:
      * 
      * @return The maturity
      */
-    int getT() const;
+    double getT() const;
 
     /**
      * @brief Get the initial date
      * 
      * @return the initial date
      */
-    int getT0() const;
+    double getT0() const;
 
     /**
      * @brief Get the type
@@ -76,7 +73,7 @@ public:
      * 
      * @return double 
      */
-    double getPrice() const;
+    // double getPrice() const;
 
     /**
      * @brief Get N
@@ -92,21 +89,13 @@ public:
      */
     int getn() const;
 
-private:
     /**
      * @brief Approximation of the price via Monte Carlo method
-     * 
-     * @param S the underlying asset
-     * @param T maturity
-     * @param T0 initial date
-     * @param K type 
-     * @param N number of paths
-     * @param n number of sub intervals
+     *
      * @return The approximated price
      */
-    double pricer(BlackScholes S, double T, double T0, int K, int N, int n) const;
+    double price() const;
 
-public:
     /**
      * @brief Get the delta 
      * 

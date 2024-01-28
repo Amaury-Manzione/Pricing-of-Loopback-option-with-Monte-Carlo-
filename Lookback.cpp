@@ -12,28 +12,22 @@ Lookback::Lookback(const BlackScholes &S, double T, double T0, int K, int N, int
     if (T0 > T){
         throw std::invalid_argument("Initial must be before the maturity");
     }
-
-    price_ = pricer(S, T, T0, K, N, n);
 }
 
 const BlackScholes &Lookback::getS() const {
     return S_;
 }
 
-int Lookback::getT() const {
+double Lookback::getT() const {
     return T_;
 }
 
-int Lookback::getT0() const {
+double Lookback::getT0() const {
     return T0_;
 }
 
 int Lookback::getK() const {
     return K_;
-}
-
-double Lookback::getPrice() const{
-    return price_;
 }
 
 int Lookback::getn() const{
@@ -44,15 +38,15 @@ int Lookback::getN() const{
     return N_;
 }
 
-double Lookback::pricer(BlackScholes S, double T, double T0, int K, int N, int n) const{
-    double step = double(T - T0)/n;
-    double price = 0;
-    for (int i = 0; i < N; i++) {
-        price += S.payoff_lookback_one_path(step, n, K);
+double Lookback::price() const{
+    double step = double(T_ - T0_)/n_;
+    double price_approx = 0;
+    for (int i = 0; i < N_; i++) {
+        price_approx += S_.payoff_lookback_one_path(step, n_, K_);
     }
 
     // discounting 
-    return exp(-S.getR() * T) * price / N;
+    return exp(-S_.getR() * T_) * price_approx / N_;
 }
 
 double Lookback::delta(double epsilon) const {
@@ -61,12 +55,12 @@ double Lookback::delta(double epsilon) const {
     // Compute option price at S - epsilon
     double S_minus_epsilon = S_.getS0() - epsilon;
     BlackScholes S_left(S_minus_epsilon, S_.getR(), S_.getSigma());
-    double P_left = pricer(S_left, T_, T0_, K_, M, n_);
+    double P_left = Lookback(S_left, T_, T0_, K_, M, n_).price();
 
     // Compute option price at S + epsilon
     double S_plus_epsilon = S_.getS0() + epsilon;
     BlackScholes S_right(S_plus_epsilon, S_.getR(), S_.getSigma());
-    double P_right = pricer(S_right, T_, T0_, K_, M, n_);
+    double P_right = Lookback(S_right, T_, T0_, K_, M, n_).price();
 
     // Compute delta using centered difference
     double delta = (P_right - P_left) / (2 * epsilon);
@@ -75,20 +69,20 @@ double Lookback::delta(double epsilon) const {
 }
 
 double Lookback::gamma(double epsilon) const{
-    int M = int(2 / std::pow(epsilon, 2));
+    int M = int(4 / std::pow(epsilon, 4));
 
     // Compute option price at S - epsilon
     double S_minus_epsilon = S_.getS0() - epsilon;
     BlackScholes S_left(S_minus_epsilon, S_.getR(), S_.getSigma());
-    double P_left = pricer(S_left, T_, T0_, K_, M, n_);
+    double P_left = Lookback(S_left, T_, T0_, K_, M, n_).price();
 
     // Compute option price at S + epsilon
     double S_plus_epsilon = S_.getS0() + epsilon;
     BlackScholes S_right(S_plus_epsilon, S_.getR(), S_.getSigma());
-    double P_right = pricer(S_right, T_, T0_, K_, M, n_);
+    double P_right = Lookback(S_right, T_, T0_, K_, M, n_).price();
 
     // Compute gamma using centered difference
-    double gamma = (P_left - 2 * price_ + P_right) / (4 * epsilon * epsilon);
+    double gamma = (P_right - 2 * this->price() + P_left) / (epsilon * epsilon);
 
     return gamma;
 }
@@ -97,10 +91,10 @@ double Lookback::theta(double epsilon) const{
     int M = int(4 / std::pow(epsilon, 4));
 
     // Compute option price at T - epsilon
-    double P_minus_epsilon = pricer(S_, T_ - epsilon, T0_, K_, M, n_);
+    double P_minus_epsilon = Lookback(S_, T_ - epsilon, T0_, K_, M, n_).price();
 
     // Compute option price at T + epsilon
-    double P_plus_epsilon = pricer(S_, T_ + epsilon, T0_, K_, M, n_);
+    double P_plus_epsilon = Lookback(S_, T_ + epsilon, T0_, K_, M, n_).price();
 
     // Compute theta using centered difference
     double theta = (P_plus_epsilon - P_minus_epsilon) / (2 * epsilon);
@@ -114,12 +108,12 @@ double Lookback::rho(double epsilon) const{
     // Compute option price at r - epsilon
     double r_minus_epsilon = S_.getR() - epsilon;
     BlackScholes S_left(S_.getS0(), r_minus_epsilon, S_.getSigma());
-    double P_left = pricer(S_left, T_, T0_, K_, M, n_);
+    double P_left = Lookback(S_left, T_, T0_, K_, M, n_).price();
 
     // Compute option price at r + epsilon
     double r_plus_epsilon = S_.getR() + epsilon;
     BlackScholes S_right(S_.getS0(), r_plus_epsilon, S_.getSigma());
-    double P_right = pricer(S_right, T_, T0_, K_, M, n_);
+    double P_right = Lookback(S_right, T_, T0_, K_, M, n_).price();
 
     // Compute rho using centered difference
     double rho = (P_right - P_left) / (2 * epsilon);
@@ -132,14 +126,14 @@ double Lookback::vega(double epsilon) const{
     int M = int(4 / std::pow(epsilon, 4));
 
     // Compute option price at sigma - epsilon
-    double vega_minus_epsilon = S_.getSigma() - epsilon;
-    BlackScholes S_left(S_.getS0(), S_.getR(), vega_minus_epsilon);
-    double P_left = pricer(S_left, T_, T0_, K_, M, n_);
+    double sigma_minus_epsilon = S_.getSigma() - epsilon;
+    BlackScholes S_left(S_.getS0(), S_.getR(), sigma_minus_epsilon);
+    double P_left = Lookback(S_left, T_, T0_, K_, M, n_).price();
 
     // Compute option price at S + epsilon
-    double vega_plus_epsilon = S_.getSigma() + epsilon;
-    BlackScholes S_right(S_.getS0(), S_.getR(), vega_plus_epsilon);
-    double P_right = pricer(S_right, T_, T0_, K_, M, n_);
+    double sigma_plus_epsilon = S_.getSigma() + epsilon;
+    BlackScholes S_right(S_.getS0(), S_.getR(), sigma_plus_epsilon);
+    double P_right = Lookback(S_right, T_, T0_, K_, M, n_).price();
 
     // Compute vega using centered difference
     double vega = (P_right - P_left) / (2 * epsilon);
