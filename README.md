@@ -5,14 +5,12 @@ Nous calculons le prix ainsi que les différentes lettres grecques d'options loo
 ```math
 $$
 S(T) - \min_{t \in [0,T]} S_t
-$$
-```
-pour un put
-
-$$
+\quad
 \max_{t \in [0,T]} S_t - S(T)
 $$
-pour un put
+```
+pour un call et un put.
+
 
 Pour utiliser l'interface :
 ### _Sous Visual Code_ 
