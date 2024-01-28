@@ -2,9 +2,9 @@
 
 Nous calculons le prix ainsi que les différentes lettres grecques d'options loopback, dont le pay-off est de la forme un pay-off :
 
-$$
+\[
 S(T) - \min_{t \in [0,T]} S_t
-$$
+\]
 pour un put
 
 $$
