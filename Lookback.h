@@ -107,6 +107,13 @@ public:
     double delta(double epsilon) const;
 
     /**
+     * @brief Get the delta with integration by parts method
+     * 
+     * @return double 
+     */
+    double delta_IBP() const;
+
+    /**
      * @brief Get the gamma
      * 
      * @throw "Invalid argument" if epsilon =< 0

@@ -76,7 +76,7 @@ public:
      * @param type
      * @return the undiscounted payoff
      */
-    double payoff_lookback_one_path(double step, double n, int type) const;
+    std::pair<double,double> payoff_lookback_one_path(double step, double n, int type) const;
 };
 
 

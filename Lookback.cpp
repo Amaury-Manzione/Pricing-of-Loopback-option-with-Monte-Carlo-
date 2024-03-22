@@ -42,11 +42,23 @@ double Lookback::price() const{
     double step = double(T_ - T0_)/n_;
     double price_approx = 0;
     for (int i = 0; i < N_; i++) {
-        price_approx += S_.payoff_lookback_one_path(step, n_, K_);
+        price_approx += S_.payoff_lookback_one_path(step, n_, K_).first;
     }
 
     // discounting 
     return exp(-S_.getR() * T_) * price_approx / N_;
+}
+
+double Lookback::delta_IBP() const{
+    double step = double(T_ - T0_)/n_;
+    double delta_approx = 0;
+    for (int i = 0; i < N_; i++) {
+        std::pair p = S_.payoff_lookback_one_path(step, n_, K_);
+        delta_approx += p.first*p.second / (T_*getS().getSigma()*getS().getS0());
+    }
+
+    // discounting 
+    return exp(-S_.getR() * T_) * delta_approx / N_;
 }
 
 double Lookback::delta(double epsilon) const {

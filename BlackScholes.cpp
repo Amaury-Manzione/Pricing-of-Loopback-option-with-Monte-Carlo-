@@ -22,7 +22,7 @@ double BlackScholes::getSigma() const {
     return sigma_;
 }
 
-double BlackScholes::payoff_lookback_one_path(double step, double n, int type) const {
+std::pair<double,double> BlackScholes::payoff_lookback_one_path(double step, double n, int type) const {
     if (type != 0 && type != 1) {
         throw std::invalid_argument("Type must be 0 or 1");
     }
@@ -37,9 +37,11 @@ double BlackScholes::payoff_lookback_one_path(double step, double n, int type) c
     double St = S0_;
     double minSt = S0_;  // Minimum value for lookback call
     double maxSt = S0_;  // Maximum value for lookback put
+    double W_T = 0.;
 
     for (int i = 0; i <= n; ++i) {
         double Z = distribution(gen);
+        W_T += sqrt(dt)*Z;
         St = St * exp((r_ - 0.5 * sigma_ * sigma_) * dt + sigma_ * sqrt(dt) * Z);
 
         // Update minimum and maximum values for lookback options
@@ -51,9 +53,9 @@ double BlackScholes::payoff_lookback_one_path(double step, double n, int type) c
 
     // Calculate lookback payoff based on the option type
     if (type == 0) {  // Call option
-        return St - minSt;
+        return std::make_pair(St - minSt,W_T);
     }
     else {  // Put option
-        return maxSt - St;
+        return std::make_pair(maxSt - St,W_T);
     }
 }
