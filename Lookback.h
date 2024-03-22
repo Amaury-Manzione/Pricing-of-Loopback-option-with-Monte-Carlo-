@@ -124,6 +124,13 @@ public:
     double gamma(double epsilon) const;
 
     /**
+     * @brief Get the gamma with integration by parts method
+     * 
+     * @return double 
+     */
+    double gamma_IBP() const;
+
+    /**
      * @brief Get the theta
      * 
      * @throw "Invalid argument" if epsilon =< 0
@@ -153,5 +160,4 @@ public:
      */
     double vega(double epsilon) const;
 };
-
 #endif

@@ -53,7 +53,7 @@ double Lookback::delta_IBP() const{
     double step = double(T_ - T0_)/n_;
     double delta_approx = 0;
     for (int i = 0; i < N_; i++) {
-        std::pair p = S_.payoff_lookback_one_path(step, n_, K_);
+        std::pair<double,double> p = S_.payoff_lookback_one_path(step, n_, K_);
         delta_approx += p.first*p.second / (T_*getS().getSigma()*getS().getS0());
     }
 
@@ -78,6 +78,20 @@ double Lookback::delta(double epsilon) const {
     double delta = (P_right - P_left) / (2 * epsilon);
 
     return delta;
+}
+
+double Lookback::gamma_IBP() const{
+    double step = double(T_ - T0_)/n_;
+    double gamma_approx = 0;
+    for (int i = 0; i < N_; i++) {
+        std::pair<double,double> p = S_.payoff_lookback_one_path(step, n_, K_);
+        double sigma = getS().getSigma();
+        double S0 = getS().getS0();
+        gamma_approx += ((p.second*p.second)/(sigma*T_) -p.second -1/sigma)*p.first / (T_*sigma*S0*S0);
+    }
+
+    // discounting 
+    return exp(-S_.getR() * T_) * gamma_approx / N_;
 }
 
 double Lookback::gamma(double epsilon) const{

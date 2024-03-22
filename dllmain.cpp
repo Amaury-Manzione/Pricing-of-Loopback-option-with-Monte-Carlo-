@@ -30,8 +30,16 @@ extern "C" {
         return lookback->price();
     }
 
+    DLL_EXPORT double delta_IBP_VBA(Lookback* lookback, double epsilon) {
+        return lookback->delta_IBP();
+    }
+
     DLL_EXPORT double delta_VBA(Lookback* lookback, double epsilon) {
         return lookback->delta(epsilon);
+    }
+
+    DLL_EXPORT double gamma_IBP_VBA(Lookback* lookback, double epsilon) {
+        return lookback->gamma_IBP();
     }
 
     DLL_EXPORT double gamma_VBA(Lookback* lookback, double epsilon) {
