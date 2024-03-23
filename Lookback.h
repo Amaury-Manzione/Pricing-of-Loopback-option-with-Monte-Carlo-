@@ -107,13 +107,6 @@ public:
     double delta(double epsilon) const;
 
     /**
-     * @brief Get the delta with integration by parts method
-     * 
-     * @return double 
-     */
-    double delta_IBP() const;
-
-    /**
      * @brief Get the gamma
      * 
      * @throw "Invalid argument" if epsilon =< 0
@@ -122,13 +115,6 @@ public:
      * @return the approximation of the gamma
      */
     double gamma(double epsilon) const;
-
-    /**
-     * @brief Get the gamma with integration by parts method
-     * 
-     * @return double 
-     */
-    double gamma_IBP() const;
 
     /**
      * @brief Get the theta

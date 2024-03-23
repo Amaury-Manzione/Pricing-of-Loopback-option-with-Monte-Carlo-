@@ -30,16 +30,8 @@ extern "C" {
         return lookback->price();
     }
 
-    DLL_EXPORT double delta_IBP_VBA(Lookback* lookback, double epsilon) {
-        return lookback->delta_IBP();
-    }
-
     DLL_EXPORT double delta_VBA(Lookback* lookback, double epsilon) {
         return lookback->delta(epsilon);
-    }
-
-    DLL_EXPORT double gamma_IBP_VBA(Lookback* lookback, double epsilon) {
-        return lookback->gamma_IBP();
     }
 
     DLL_EXPORT double gamma_VBA(Lookback* lookback, double epsilon) {
@@ -58,34 +50,34 @@ extern "C" {
         return lookback->vega(epsilon);
     }
 
-    DLL_EXPORT double compute_price(double S0, double r, double sigma, double T, double T0, int K, int n, int N) {
+    DLL_EXPORT double compute_price(double S0, double r, double sigma, double T, double T0, int K, int N, int n) {
         BlackScholes B(S0, r, sigma);
-        return Lookback(B, T, T0, K, n, N).price();
+        return Lookback(B, T, T0, K, N, n).price();
     }
 
-    DLL_EXPORT double compute_delta(double S0, double r, double sigma, double T, double T0, int K, int n, int N, double epsilon) {
+    DLL_EXPORT double compute_delta(double S0, double r, double sigma, double T, double T0, int K, int N, int n, double epsilon) {
         BlackScholes B(S0, r, sigma);
-        return Lookback(B, T, T0, K, n, N).delta(epsilon);
+        return Lookback(B, T, T0, K, N, n).delta(epsilon);
     }
 
-    DLL_EXPORT double compute_gamma(double S0, double r, double sigma, double T, double T0, int K, int n, int N, double epsilon) {
+    DLL_EXPORT double compute_gamma(double S0, double r, double sigma, double T, double T0, int K, int N, int n, double epsilon) {
         BlackScholes B(S0, r, sigma);
-        return Lookback(B, T, T0, K, n, N).gamma(epsilon);
+        return Lookback(B, T, T0, K, N, n).gamma(epsilon);
     }
 
-    DLL_EXPORT double compute_theta(double S0, double r, double sigma, double T, double T0, int K, int n, int N, double epsilon) {
+    DLL_EXPORT double compute_theta(double S0, double r, double sigma, double T, double T0, int K, int N, int n, double epsilon) {
         BlackScholes B(S0, r, sigma);
-        return Lookback(B, T, T0, K, n, N).theta(epsilon);
+        return Lookback(B, T, T0, K, N, n).theta(epsilon);
     }
 
-    DLL_EXPORT double compute_rho(double S0, double r, double sigma, double T, double T0, int K, int n, int N, double epsilon) {
+    DLL_EXPORT double compute_rho(double S0, double r, double sigma, double T, double T0, int K, int N, int n, double epsilon) {
         BlackScholes B(S0, r, sigma);
-        return Lookback(B, T, T0, K, n, N).rho(epsilon);
+        return Lookback(B, T, T0, K, N, n).rho(epsilon);
     }
 
-    DLL_EXPORT double compute_vega(double S0, double r, double sigma, double T, double T0, int K, int n, int N, double epsilon) {
+    DLL_EXPORT double compute_vega(double S0, double r, double sigma, double T, double T0, int K, int N, int n, double epsilon) {
         BlackScholes B(S0, r, sigma);
-        return Lookback(B, T, T0, K, n, N).vega(epsilon);
+        return Lookback(B, T, T0, K, N, n).vega(epsilon);
     }
 }
 
