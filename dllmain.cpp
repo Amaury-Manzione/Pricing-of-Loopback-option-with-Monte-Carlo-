@@ -27,7 +27,8 @@ extern "C" {
     }
 
     DLL_EXPORT double price_VBA(Lookback* lookback) {
-        return lookback->price();
+        std::vector<std::vector<double>> matrix = Lookback::generate_normal_increments(lookback->getN(),lookback->getn());
+        return lookback->price(matrix);
     }
 
     DLL_EXPORT double delta_VBA(Lookback* lookback, double epsilon) {
@@ -54,7 +55,8 @@ extern "C" {
 
     DLL_EXPORT double compute_price(double S0, double r, double sigma, double T, int K, int N, int n) {
         BlackScholes B(S0, r, sigma);
-        return Lookback(B, T, K, N, n).price();
+        std::vector<std::vector<double>> matrix = Lookback::generate_normal_increments(N,n);
+        return Lookback(B, T, K, N, n).price(matrix);
     }
 
     DLL_EXPORT double compute_delta(double S0, double r, double sigma, double T, int K, int N, int n, double epsilon) {

@@ -74,9 +74,10 @@ public:
      * @param pas
      * @param n
      * @param type
+     * @param Z (list of normal increments) 
      * @return the undiscounted payoff
      */
-    double payoff_lookback_one_path(double step, double n, int type) const;
+    double payoff_lookback_one_path(double step, double n, int type,std::vector<double> Z) const;
 };
 
 

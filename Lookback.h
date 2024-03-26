@@ -73,11 +73,21 @@ public:
     int getn() const;
 
     /**
+     * @brief generate matrix of centred normal laws
+     * 
+     * @param N 
+     * @param n 
+     * @return std::vector<std::vector<double>> 
+     */
+    static std::vector<std::vector<double>> generate_normal_increments(int N,int n);
+
+    /**
      * @brief Approximation of the price via Monte Carlo method
      *
+     * 
      * @return The approximated price
      */
-    double price() const;
+    double price(std::vector<std::vector<double>>) const;
 
     /**
      * @brief Get the delta 
