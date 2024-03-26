@@ -61,7 +61,7 @@ public:
      * @brief Given a step, n, and a type, generates a discrete path of the underlying asset
      * under the Black and Scholes model at the following dates :
      *
-     * T0 (we observe S0 at this date)
+     * T0 = 0 (we observe S0 at this date)
      * T1 = T0 + step
      * ...
      * Tn = T0 + step * n

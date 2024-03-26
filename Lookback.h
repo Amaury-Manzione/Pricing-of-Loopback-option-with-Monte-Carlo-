@@ -14,10 +14,8 @@ class Lookback {
 private:
     // the underlying asset
     BlackScholes S_;
-    // maturity
+    // residual maturity in years (assume the option begins at T0 = 0)
     double T_;
-    // initial date
-    double T0_;
     // type of option (call or put)
     int K_;
     // number of paths for the approximation via Monte Carlo
@@ -29,16 +27,15 @@ public:
     /**
      * @brief Construct a new Loopback object
      * 
-     * @throw "Invalid argument" if : T, T0, N or n negative, T0 > T, K different from 0 and 1
+     * @throw "Invalid argument" if : T, N or n negative, K different from 0 and 1
      * 
      * @param S the underlying
-     * @param T the maturity
-     * @param T0 the initial date
+     * @param T the residual maturity
      * @param K the type (0 for call and 1 for put)
      * @param N number of paths for the approximation via Monte Carlo
      * @param n number of sub intervals for each discretization
      */
-    Lookback(const BlackScholes &S, double T, double T0, int K, int N, int n);
+    Lookback(const BlackScholes &S, double T, int K, int N, int n);
 
     /**
      * @brief Get the underlying
@@ -48,18 +45,11 @@ public:
     const BlackScholes &getS() const;
 
     /**
-     * @brief Get the maturity 
+     * @brief Get the residual maturity 
      * 
-     * @return The maturity
+     * @return The residual maturity
      */
     double getT() const;
-
-    /**
-     * @brief Get the initial date
-     * 
-     * @return the initial date
-     */
-    double getT0() const;
 
     /**
      * @brief Get the type
@@ -67,13 +57,6 @@ public:
      * @return int representing the type
      */
     int getK() const;
-
-    /**
-     * @brief Get the approximative price 
-     * 
-     * @return double 
-     */
-    // double getPrice() const;
 
     /**
      * @brief Get N
